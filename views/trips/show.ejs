@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>
+        <%= trip.title %> - <%= trip.country %>
+    </h1>
+    <p>Number of days: <%= trip.numOfDays %>
+    </p>
+    <p>Started my trip in <%= trip.startCity %>, and ended it in <%= trip.endCity %>
+    </p>
+    <p>Last update: <%= trip.lastUpdate %>
+    </p>
+    <img src="<%= trip.coverUrl %>" alt="">
+    <br>
+    <a href="/trips/<%= trip._id %>/edit">Edit</a>
+    <form action="/trips/<%= trip._id %>?_method=DELETE" method="POST">
+        <button>Delete</button>
+    </form>
+</body>
+
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>New Trip</h1>
+    <form action="/trips" method="POST">
+        <section>
+            <label for="title">Enter Title:</label>
+            <input type="text" id="title" name="trip[title]">
+        </section>
+        <section>
+            <label for="country">Enter Country:</label>
+            <input type="text" id="country" name="trip[country]">
+        </section>
+        <section>
+            <label for="coverUrl">Enter Cover URL:</label>
+            <input type="text" id="coverUrl" name="trip[coverUrl]">
+        </section>
+        <section>
+            <label for="numOfDays">Enter Number of Days:</label>
+            <input type="number" id="numOfDays" name="trip[numOfDays]" min="1" step="1">
+        </section>
+        <section>
+            <label for="startCity">Enter Start City:</label>
+            <input type="text" id="startCity" name="trip[startCity]">
+        </section>
+        <section>
+            <label for="endCity">Enter End City:</label>
+            <input type="text" id="endCity" name="trip[endCity]">
+        </section>
+        <button>Submit</button>
+    </form>
+    <a href="/trips">All trips</a>
+</body>
+
+</html>

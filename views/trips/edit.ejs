@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Edit Trip</h1>
+    <form action="/trips/<%= trip._id %>?_method=PUT" method="POST">
+        <section>
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="trip[title]" value="<%= trip.title %>">
+        </section>
+        <section>
+            <label for="country">Country:</label>
+            <input type="text" id="country" name="trip[country]" value="<%= trip.country %>">
+        </section>
+        <section>
+            <label for="coverUrl">Cover URL:</label>
+            <input type="text" id="coverUrl" name="trip[coverUrl]" value="<%= trip.coverUrl %>">
+        </section>
+        <section>
+            <label for="numOfDays">Number of Days:</label>
+            <input type="number" id="numOfDays" name="trip[numOfDays]" min="1" step="1" value="<%= trip.numOfDays %>">
+        </section>
+        <section>
+            <label for="startCity">Start City:</label>
+            <input type="text" id="startCity" name="trip[startCity]" value="<%= trip.startCity %>">
+        </section>
+        <section>
+            <label for="endCity">End City:</label>
+            <input type="text" id="endCity" name="trip[endCity]" value="<%= trip.endCity %>">
+        </section>
+        <button>Update Trip</button>
+    </form>
+    <a href="/trips/<%= trip._id %>">Back to Trip</a>
+</body>
+
+</html>

@@ -25,6 +25,8 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 const lastUpdate = () => {
     var today = new Date();
@@ -73,6 +75,10 @@ app.delete('/trips/:id', async (req, res) => {
     await Trip.findByIdAndDelete(id);
     res.redirect('/trips');
 })
+
+app.get('/', (req, res) => {
+    res.render('home');
+});
 
 app.listen(8080, () => {
     console.log("Listening on port 8080");

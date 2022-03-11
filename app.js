@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require('path');
 const mongoose = require('mongoose');
+const ejsMate = require('ejs-mate');
 const methodOverride = require('method-override');
 
 const Trip = require('./models/trip');
@@ -18,6 +19,7 @@ db.once("open", () => {
     console.log("Database connected");
 });
 
+app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
@@ -61,6 +63,7 @@ app.get('/trips/:id/edit', async (req, res) => {
 app.put('/trips/:id', async (req, res) => {
     const { id } = req.params;
     const trip = await Trip.findByIdAndUpdate(id, { ...req.body.trip });
+    trip.lastUpdate = lastUpdate();
     await trip.save();
     res.redirect(`/trips/${trip._id}`);
 })

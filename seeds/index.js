@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const Trip = require('../models/trip');
 const locations = require('./locations');
+const { count } = require('../models/trip');
+const { json } = require('express/lib/response');
 
 
 mongoose.connect('mongodb://localhost:27017/trips', {

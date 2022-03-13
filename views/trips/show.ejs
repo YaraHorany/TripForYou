@@ -1,16 +1,32 @@
 <% layout('layouts/boilerplate') %>
-    <h1>
-        <%= trip.title %> - <%= trip.country %>
-    </h1>
-    <p>Number of days: <%= trip.numOfDays %>
-    </p>
-    <p>Started my trip in <%= trip.startCity %>, and ended it in <%= trip.endCity %>
-    </p>
-    <p>Last update: <%= trip.lastUpdate %>
-    </p>
-    <img src="<%= trip.coverUrl %>" alt="">
-    <br>
-    <a href="/trips/<%= trip._id %>/edit">Edit</a>
-    <form action="/trips/<%= trip._id %>?_method=DELETE" method="POST">
-        <button>Delete</button>
-    </form>
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card" style="width: 18rem;">
+                <img src="<%= trip.coverUrl %>" class="card-img-top" alt="">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <%= trip.country %>
+                    </h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Last update: <%= trip.lastUpdate %>
+                    </h6>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's
+                        content.</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Number of days: <%= trip.numOfDays %>
+                    </li>
+                    <li class="list-group-item">Start city: <%= trip.startCity %>
+                    </li>
+                    <li class="list-group-item">End city: <%= trip.endCity %>
+                    </li>
+                </ul>
+                <div class="card-body d-flex justify-content-evenly">
+                    <a class="card-link btn btn-info" href="/trips/<%= trip._id %>/edit">Edit</a>
+                    <form class="d-inline" action="/trips/<%= trip._id %>?_method=DELETE" method="POST">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>

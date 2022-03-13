@@ -1,17 +1,34 @@
 <% layout('layouts/boilerplate') %>
-    <h1>All trips</h1>
-    <ul>
+    <div class="container">
         <% for(let trip of trips) { %>
-            <li>
-                <h1>
-                    <%= trip.title %> - <%= trip.country %>
-                </h1>
-                <a href="/trips/<%= trip._id %>">
-                    <p>
-                        <%= trip._id %>
-                    </p>
-                </a>
-                <img src="<%= trip.coverUrl %>" alt="">
-            </li>
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <a href="/trips/<%= trip._id %>">
+                            <img src="<%= trip.coverUrl %>" class="img-fluid rounded-start" alt="...">
+                        </a>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <a href="/trips/<%= trip._id %>" class="text-decoration-none">
+                                <h5 class="card-title mb-3">
+                                    <%= trip.country %>
+                                </h5>
+                            </a>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                <%= trip.numOfDays %> Days
+                            </h6>
+                            <p class="card-text">This is a wider card with supporting text below as a natural
+                                lead-in to
+                                additional content. This content is a little bit longer.</p>
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    <%= trip.lastUpdate %>
+                                </small>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <% } %>
-    </ul>
+    </div>

@@ -35,6 +35,10 @@ router.get('/new', (req, res) => {
 
 router.get('/:id', catchAsync(async (req, res) => {
     const trip = await Trip.findById(req.params.id).populate('comments');
+    if (!trip) {
+        req.flash('error', 'Cannot find that trip!');
+        return res.redirect('/trips')
+    }
     res.render('trips/show', { trip });
 }));
 
@@ -42,12 +46,17 @@ router.post('/', validateTrip, catchAsync(async (req, res, next) => {
     const trip = new Trip(req.body.trip);
     trip.lastUpdate = lastUpdate();
     await trip.save();
+    req.flash('success', 'Successfully made a new trip!');
     res.redirect('/trips');
 }));
 
 router.get('/:id/edit', catchAsync(async (req, res) => {
     const { id } = req.params;
     const trip = await Trip.findById(id);
+    if (!trip) {
+        req.flash('error', 'Cannot find that trip!');
+        return res.redirect('/trips')
+    }
     res.render('trips/edit', { trip });
 }));
 
@@ -56,12 +65,14 @@ router.put('/:id', validateTrip, catchAsync(async (req, res) => {
     const trip = await Trip.findByIdAndUpdate(id, { ...req.body.trip });
     trip.lastUpdate = lastUpdate();
     await trip.save();
+    req.flash('success', 'Successfully updated trip!');
     res.redirect(`/trips/${trip._id}`);
 }));
 
 router.delete('/:id', catchAsync(async (req, res) => {
     const { id } = req.params;
     await Trip.findByIdAndDelete(id);
+    req.flash('success', 'Successfully deleted trip!');
     res.redirect('/trips');
 }));
 

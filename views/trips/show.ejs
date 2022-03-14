@@ -1,7 +1,7 @@
 <% layout('layouts/boilerplate') %>
     <div class="row">
-        <div class="col-md-6 offset-md-3">
-            <div class="card" style="width: 18rem;">
+        <div class="col-md-6">
+            <div class="card mb-3">
                 <img src="<%= trip.coverUrl %>" class="card-img-top" alt="">
                 <div class="card-body">
                     <h5 class="card-title">
@@ -26,6 +26,51 @@
                     <form class="d-inline" action="/trips/<%= trip._id %>?_method=DELETE" method="POST">
                         <button class="btn btn-danger">Delete</button>
                     </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-0 border" style="background-color: #f0f2f5;">
+                <div class="card-body p-4">
+
+                    <form action="/trips/<%= trip._id %>/comments" method="post" class="validated-form mb-3" novalidate>
+                        <div class="mb-3">
+                            <label class="form-label" for="body">+ Add a comment</label>
+                            <textarea class="form-control" name="comment[body]" id="body" cols="30" rows="3"
+                                placeholder="Type your comment.." required></textarea>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        </div>
+                        <button class="btn btn-primary">Submit</button>
+                    </form>
+
+                    <% for(let comment of trip.comments){ %>
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex flex-start">
+                                    <img class="rounded-circle shadow-1-strong me-3"
+                                        src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(26).webp" alt="avatar"
+                                        width="40" height="40" />
+                                    <div class="w-100">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <h6 class="text-primary fw-bold mb-0">
+                                                lara_stewart
+                                                <span class="text-dark ms-2">
+                                                    <%= comment.body %>
+                                                </span>
+                                            </h6>
+                                        </div>
+                                        <form action="/trips/<%= trip._id %>/comments/<%= comment._id %>?_method=DELETE"
+                                            method="POST">
+                                            <button class="btn btn-link btn-sm link-grey small">Remove</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% } %>
                 </div>
             </div>
         </div>

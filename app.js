@@ -80,6 +80,16 @@ app.get('/', (req, res) => {
     res.render('home');
 });
 
+app.get('/error', (req, res) => {
+    chicken.fly();
+})
+
+app.use((err, req, res, next) => {
+    const { statusCode = 500 } = err;
+    if (!err.message) err.message = 'Oh No, Something Went Wrong!'
+    res.status(statusCode).render('error', { err })
+})
+
 app.listen(8080, () => {
     console.log("Listening on port 8080");
 })

@@ -1,31 +1,46 @@
 <% layout('layouts/boilerplate') %>
     <div class="row">
         <div class="col-md-6 offset-md-3">
-            <form action="/trips/<%= trip._id %>?_method=PUT" method="POST">
+            <form action="/trips/<%= trip._id %>?_method=PUT" method="POST" novalidate class="validated-form">
                 <div class="mb-3">
                     <label for="country" class="form-label">Country</label>
                     <input type="text" class="form-control" id="country" value="<%= trip.country %>"
-                        name="trip[country]">
+                        name="trip[country]" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="coverUrl" class="form-label">Cover URL</label>
                     <input type="text" class="form-control" id="coverUrl" value="<%= trip.coverUrl %>"
-                        name="trip[coverUrl]">
+                        name="trip[coverUrl]" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="numOfDays" class="form-label">Number of Days</label>
                     <input type="number" class="form-control" id="numOfDays" value="<%= trip.numOfDays %>"
-                        name="trip[numOfDays]" min="1" step="1">
+                        name="trip[numOfDays]" min="1" step="1" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="startCity" class="form-label">Start City</label>
                     <input type="text" class="form-control" id="startCity" value="<%= trip.startCity %>"
-                        name="trip[startCity]">
+                        name="trip[startCity]" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="endCity" class="form-label">End City</label>
                     <input type="text" class="form-control" id="endCity" value="<%= trip.endCity %>"
-                        name="trip[endCity]">
+                        name="trip[endCity]" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
                 <div class="mb-3">
                     <button class="btn btn-primary">Update Trip</button>

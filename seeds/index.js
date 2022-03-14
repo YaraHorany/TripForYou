@@ -30,7 +30,6 @@ const seedDB = async () => {
         const numOfDays = Math.floor(Math.random() * 14) + 1; // return a random number from 1 to 14
         const randLocation = Math.floor(Math.random() * 40);
         const trip = new Trip({
-            title: 'My Amazing Trip',
             coverUrl: 'https://media.istockphoto.com/photos/young-man-arms-outstretched-by-the-sea-at-sunrise-enjoying-freedom-picture-id1285301614',
             country: locations[randLocation].country,
             numOfDays,

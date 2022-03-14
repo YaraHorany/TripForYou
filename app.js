@@ -2,12 +2,11 @@ const express = require("express");
 const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
-const { tripSchema, commentSchema } = require('./schemas.js');
-const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
-const Trip = require('./models/trip');
-const Comment = require('./models/comment');
+
+const trips = require('./routes/trips');
+const comments = require('./routes/comments');
 
 const app = express();
 
@@ -30,93 +29,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-const validateTrip = (req, res, next) => {
-    const { error } = tripSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',');
-        throw new ExpressError(msg, 400);
-    } else {
-        next();
-    }
-}
-
-const validateComment = (req, res, next) => {
-    const { error } = commentSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',');
-        throw new ExpressError(msg, 400);
-    } else {
-        next();
-    }
-}
-
-const lastUpdate = () => {
-    var today = new Date();
-    var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    return (date + ' ' + time);
-}
-
-app.get('/trips', catchAsync(async (req, res) => {
-    const trips = await Trip.find({});
-    res.render('trips/index', { trips });
-}))
-
-app.get('/trips/new', (req, res) => {
-    res.render('trips/new');
-})
-
-app.get('/trips/:id', catchAsync(async (req, res) => {
-    const trip = await Trip.findById(req.params.id).populate('comments');
-    res.render('trips/show', { trip });
-}))
-
-app.post('/trips', validateTrip, catchAsync(async (req, res, next) => {
-    const trip = new Trip(req.body.trip);
-    trip.lastUpdate = lastUpdate();
-    await trip.save();
-    res.redirect('/trips');
-}))
-
-app.get('/trips/:id/edit', catchAsync(async (req, res) => {
-    const { id } = req.params;
-    const trip = await Trip.findById(id);
-    res.render('trips/edit', { trip });
-}))
-
-app.put('/trips/:id', validateTrip, catchAsync(async (req, res) => {
-    const { id } = req.params;
-    const trip = await Trip.findByIdAndUpdate(id, { ...req.body.trip });
-    trip.lastUpdate = lastUpdate();
-    await trip.save();
-    res.redirect(`/trips/${trip._id}`);
-}))
-
-app.delete('/trips/:id', catchAsync(async (req, res) => {
-    const { id } = req.params;
-    await Trip.findByIdAndDelete(id);
-    res.redirect('/trips');
-}))
+app.use('/trips', trips);
+app.use('/trips/:id/comments', comments);
 
 app.get('/', (req, res) => {
     res.render('home');
 });
-
-app.post('/trips/:id/comments', validateComment, catchAsync(async (req, res) => {
-    const trip = await Trip.findById(req.params.id);
-    const comment = new Comment(req.body.comment);
-    trip.comments.push(comment);
-    await comment.save();
-    await trip.save();
-    res.redirect(`/trips/${trip._id}`);
-}))
-
-app.delete('/trips/:id/comments/:commentId', catchAsync(async (req, res) => {
-    const { id, commentId } = req.params;
-    await Trip.findByIdAndUpdate(id, { $pull: { comments: commentId } });
-    await Comment.findByIdAndDelete(commentId);
-    res.redirect(`/trips/${id}`);
-}))
 
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page Not Found', 404))

@@ -2,6 +2,7 @@ const express = require("express");
 const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
+const { tripSchema } = require('./schemas.js');
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
@@ -28,6 +29,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 
+const validateTrip = (req, res, next) => {
+    const { error } = tripSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',');
+        throw new ExpressError(msg, 400);
+    } else {
+        next();
+    }
+}
 
 const lastUpdate = () => {
     var today = new Date();
@@ -50,7 +60,7 @@ app.get('/trips/:id', catchAsync(async (req, res) => {
     res.render('trips/show', { trip });
 }))
 
-app.post('/trips', catchAsync(async (req, res, next) => {
+app.post('/trips', validateTrip, catchAsync(async (req, res, next) => {
     const trip = new Trip(req.body.trip);
     trip.lastUpdate = lastUpdate();
     await trip.save();
@@ -63,7 +73,7 @@ app.get('/trips/:id/edit', catchAsync(async (req, res) => {
     res.render('trips/edit', { trip });
 }))
 
-app.put('/trips/:id', catchAsync(async (req, res) => {
+app.put('/trips/:id', validateTrip, catchAsync(async (req, res) => {
     const { id } = req.params;
     const trip = await Trip.findByIdAndUpdate(id, { ...req.body.trip });
     trip.lastUpdate = lastUpdate();

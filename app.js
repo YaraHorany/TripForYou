@@ -2,8 +2,9 @@ const express = require("express");
 const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
+const catchAsync = require('./utils/catchAsync');
+const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
-
 const Trip = require('./models/trip');
 
 const app = express();
@@ -35,55 +36,56 @@ const lastUpdate = () => {
     return (date + ' ' + time);
 }
 
-app.get('/trips', async (req, res) => {
+app.get('/trips', catchAsync(async (req, res) => {
     const trips = await Trip.find({});
     res.render('trips/index', { trips });
-})
+}))
 
 app.get('/trips/new', (req, res) => {
     res.render('trips/new');
 })
 
-app.get('/trips/:id', async (req, res) => {
+app.get('/trips/:id', catchAsync(async (req, res) => {
     const trip = await Trip.findById(req.params.id);
     res.render('trips/show', { trip });
-})
+}))
 
-app.post('/trips', async (req, res) => {
+app.post('/trips', catchAsync(async (req, res, next) => {
     const trip = new Trip(req.body.trip);
     trip.lastUpdate = lastUpdate();
     await trip.save();
     res.redirect('/trips');
-})
+}))
 
-app.get('/trips/:id/edit', async (req, res) => {
+app.get('/trips/:id/edit', catchAsync(async (req, res) => {
     const { id } = req.params;
     const trip = await Trip.findById(id);
     res.render('trips/edit', { trip });
-})
+}))
 
-app.put('/trips/:id', async (req, res) => {
+app.put('/trips/:id', catchAsync(async (req, res) => {
     const { id } = req.params;
     const trip = await Trip.findByIdAndUpdate(id, { ...req.body.trip });
     trip.lastUpdate = lastUpdate();
     await trip.save();
     res.redirect(`/trips/${trip._id}`);
-})
+}))
 
-app.delete('/trips/:id', async (req, res) => {
+app.delete('/trips/:id', catchAsync(async (req, res) => {
     const { id } = req.params;
     await Trip.findByIdAndDelete(id);
     res.redirect('/trips');
-})
+}))
 
 app.get('/', (req, res) => {
     res.render('home');
 });
 
-app.get('/error', (req, res) => {
-    chicken.fly();
+app.all('*', (req, res, next) => {
+    next(new ExpressError('Page Not Found', 404))
 })
 
+// Error handler
 app.use((err, req, res, next) => {
     const { statusCode = 500 } = err;
     if (!err.message) err.message = 'Oh No, Something Went Wrong!'

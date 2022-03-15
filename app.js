@@ -6,9 +6,17 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
 
-const trips = require('./routes/trips');
-const comments = require('./routes/comments');
+// const FacebookStrategy = require('passport-facebook').Strategy;
+// const { facebook } = require('./config');
+
+const User = require('./models/user');
+
+const userRoutes = require('./routes/users');
+const tripRoutes = require('./routes/trips');
+const commentRoutes = require('./routes/comments');
 
 const app = express();
 
@@ -44,14 +52,28 @@ const sessionConfig = {
 app.use(session(sessionConfig));
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.use((req, res, next) => {
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
     next();
 })
 
-app.use('/trips', trips);
-app.use('/trips/:id/comments', comments);
+app.get('/fakeuser', async (req, res) => {
+    const user = new User({ email: 'yara@gmail.com', username: 'yara' });
+    const newUser = await User.register(user, 'chicken');
+    res.send(newUser);
+})
+
+app.use('/', userRoutes);
+app.use('/trips', tripRoutes);
+app.use('/trips/:id/comments', commentRoutes);
 
 app.get('/', (req, res) => {
     res.render('home');

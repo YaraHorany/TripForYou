@@ -9,6 +9,10 @@ const tripSchema = new Schema({
     startCity: String,
     endCity: String,
     lastUpdate: Date,
+    author: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
     comments: [
         {
             type: Schema.Types.ObjectId,

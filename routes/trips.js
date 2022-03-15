@@ -2,27 +2,15 @@ const express = require('express');
 const router = express.Router();
 
 const catchAsync = require('../utils/catchAsync');
-const ExpressError = require('../utils/ExpressError');
 
 const Trip = require('../models/trip');
-const { tripSchema } = require('../schemas.js');
-const { isLoggedIn } = require('../middleware');
+const { isLoggedIn, validateTrip, isAuthor } = require('../middleware');
 
 const lastUpdate = () => {
     var today = new Date();
     var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     return (date + ' ' + time);
-}
-
-const validateTrip = (req, res, next) => {
-    const { error } = tripSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',');
-        throw new ExpressError(msg, 400);
-    } else {
-        next();
-    }
 }
 
 router.get('/', catchAsync(async (req, res) => {
@@ -35,7 +23,12 @@ router.get('/new', isLoggedIn, (req, res) => {
 });
 
 router.get('/:id', catchAsync(async (req, res) => {
-    const trip = await Trip.findById(req.params.id).populate('comments');
+    const trip = await Trip.findById(req.params.id).populate({
+        path: 'comments',
+        populate: {
+            path: 'author'
+        }
+    }).populate('author');
     if (!trip) {
         req.flash('error', 'Cannot find that trip!');
         return res.redirect('/trips')
@@ -46,12 +39,13 @@ router.get('/:id', catchAsync(async (req, res) => {
 router.post('/', isLoggedIn, validateTrip, catchAsync(async (req, res, next) => {
     const trip = new Trip(req.body.trip);
     trip.lastUpdate = lastUpdate();
+    trip.author = req.user._id;
     await trip.save();
     req.flash('success', 'Successfully made a new trip!');
     res.redirect('/trips');
 }));
 
-router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
+router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(async (req, res) => {
     const { id } = req.params;
     const trip = await Trip.findById(id);
     if (!trip) {
@@ -61,7 +55,7 @@ router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
     res.render('trips/edit', { trip });
 }));
 
-router.put('/:id', isLoggedIn, validateTrip, catchAsync(async (req, res) => {
+router.put('/:id', isLoggedIn, isAuthor, validateTrip, catchAsync(async (req, res) => {
     const { id } = req.params;
     const trip = await Trip.findByIdAndUpdate(id, { ...req.body.trip });
     trip.lastUpdate = lastUpdate();
@@ -70,7 +64,7 @@ router.put('/:id', isLoggedIn, validateTrip, catchAsync(async (req, res) => {
     res.redirect(`/trips/${trip._id}`);
 }));
 
-router.delete('/:id', isLoggedIn, catchAsync(async (req, res) => {
+router.delete('/:id', isLoggedIn, isAuthor, catchAsync(async (req, res) => {
     const { id } = req.params;
     await Trip.findByIdAndDelete(id);
     req.flash('success', 'Successfully deleted trip!');

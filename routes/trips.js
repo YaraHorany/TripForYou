@@ -6,6 +6,7 @@ const ExpressError = require('../utils/ExpressError');
 
 const Trip = require('../models/trip');
 const { tripSchema } = require('../schemas.js');
+const { isLoggedIn } = require('../middleware');
 
 const lastUpdate = () => {
     var today = new Date();
@@ -29,7 +30,7 @@ router.get('/', catchAsync(async (req, res) => {
     res.render('trips/index', { trips });
 }));
 
-router.get('/new', (req, res) => {
+router.get('/new', isLoggedIn, (req, res) => {
     res.render('trips/new');
 });
 
@@ -42,7 +43,7 @@ router.get('/:id', catchAsync(async (req, res) => {
     res.render('trips/show', { trip });
 }));
 
-router.post('/', validateTrip, catchAsync(async (req, res, next) => {
+router.post('/', isLoggedIn, validateTrip, catchAsync(async (req, res, next) => {
     const trip = new Trip(req.body.trip);
     trip.lastUpdate = lastUpdate();
     await trip.save();
@@ -50,7 +51,7 @@ router.post('/', validateTrip, catchAsync(async (req, res, next) => {
     res.redirect('/trips');
 }));
 
-router.get('/:id/edit', catchAsync(async (req, res) => {
+router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
     const { id } = req.params;
     const trip = await Trip.findById(id);
     if (!trip) {
@@ -60,7 +61,7 @@ router.get('/:id/edit', catchAsync(async (req, res) => {
     res.render('trips/edit', { trip });
 }));
 
-router.put('/:id', validateTrip, catchAsync(async (req, res) => {
+router.put('/:id', isLoggedIn, validateTrip, catchAsync(async (req, res) => {
     const { id } = req.params;
     const trip = await Trip.findByIdAndUpdate(id, { ...req.body.trip });
     trip.lastUpdate = lastUpdate();
@@ -69,7 +70,7 @@ router.put('/:id', validateTrip, catchAsync(async (req, res) => {
     res.redirect(`/trips/${trip._id}`);
 }));
 
-router.delete('/:id', catchAsync(async (req, res) => {
+router.delete('/:id', isLoggedIn, catchAsync(async (req, res) => {
     const { id } = req.params;
     await Trip.findByIdAndDelete(id);
     req.flash('success', 'Successfully deleted trip!');

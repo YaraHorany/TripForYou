@@ -1,34 +1,38 @@
 <% layout('layouts/boilerplate') %>
-    <div class="container">
-        <% for(let trip of trips) { %>
-            <div class="card mb-3">
-                <div class="row g-0">
-                    <div class="col-md-4">
-                        <a href="/trips/<%= trip._id %>">
-                            <img src="<%= trip.coverUrl %>" class="img-fluid rounded-start" alt="...">
-                        </a>
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <a href="/trips/<%= trip._id %>" class="text-decoration-none">
-                                <h5 class="card-title mb-3">
-                                    <%= trip.country %>
-                                </h5>
+    <div class="container mt-5 mb-5">
+
+        <% const sortedTrips=trips.sort((a, b)=> b.lastUpdate - a.lastUpdate)%>
+
+            <% for(let trip of sortedTrips) { %>
+                <div class="card mb-3">
+                    <div class="row g-0 border rounded">
+                        <div class="col-md-4">
+                            <a href="/trips/<%= trip._id %>">
+                                <img src="<%= trip.coverUrl %>" class="img-fluid rounded-start" alt="...">
                             </a>
-                            <h6 class="card-subtitle mb-2 text-muted">
-                                <%= trip.numOfDays %> Days
-                            </h6>
-                            <p class="card-text">This is a wider card with supporting text below as a natural
-                                lead-in to
-                                additional content. This content is a little bit longer.</p>
-                            <p class="card-text">
-                                <small class="text-muted">
-                                    <%= trip.lastUpdate %>
-                                </small>
-                            </p>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <a href="/trips/<%= trip._id %>" class="text-decoration-none">
+                                    <h5 class="card-title mb-3">
+                                        <%= trip.country %>
+                                    </h5>
+                                </a>
+                                <h6 class="card-subtitle mb-2 text-muted">
+                                    <%= trip.numOfDays %> Days
+                                </h6>
+                                <p class="card-text">This is a wider card with supporting text below as a natural
+                                    lead-in to
+                                    additional content. This content is a little bit longer.</p>
+                                <p class="card-text">
+                                    <small class="text-muted">
+                                        <%= trip.lastUpdate %>
+                                    </small>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <% } %>
+                <% } %>
+
     </div>

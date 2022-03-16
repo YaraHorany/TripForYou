@@ -1,7 +1,9 @@
-const { tripSchema, commentSchema } = require('./schemas.js');
+const { tripSchema, commentSchema } = require('./schemas/schemas');
 const ExpressError = require('./utils/ExpressError');
 const Trip = require('./models/trip');
 const Comment = require('./models/comment');
+
+const { validationResult } = require('express-validator');
 
 module.exports.isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
@@ -51,3 +53,16 @@ module.exports.isReviewAuthor = async (req, res, next) => {
     }
     next();
 }
+
+module.exports.validateRequestSchema = (req, res, next) => {
+    const error = validationResult(req);
+    console.log(error);
+    if (error && error.errors.length != 0) {
+        const msg = error.errors.map(el => el.msg).join(',');
+        throw new ExpressError(msg, 400);
+    } else {
+        next();
+    }
+}
+
+

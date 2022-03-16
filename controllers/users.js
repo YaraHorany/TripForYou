@@ -15,6 +15,7 @@ module.exports.register = async (req, res) => {
             res.redirect('/trips');
         })
     } catch (e) {
+        console.log('error!!!!!');
         req.flash('error', e.message);
         res.redirect('/register');
     }

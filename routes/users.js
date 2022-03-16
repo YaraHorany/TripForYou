@@ -4,9 +4,16 @@ const passport = require('passport');
 const catchAsync = require('../utils/catchAsync');
 const users = require('../controllers/users');
 
-router.route('/register')
-    .get(users.renderRegister)
-    .post(catchAsync(users.register));
+const { registerSchema } = require('../schemas/registerSchema');
+const { validateRequestSchema } = require('../middleware');
+
+router.get('/register', users.renderRegister);
+
+router.post(
+    '/register',
+    registerSchema,
+    validateRequestSchema,
+    catchAsync(users.register));
 
 router.route('/login')
     .get(users.renderLogin)
@@ -15,3 +22,4 @@ router.route('/login')
 router.get('/logout', users.logout);
 
 module.exports = router;
+

@@ -49,6 +49,9 @@ const sessionConfig = {
         maxAge: 1000 * 60 * 60 * 24 * 7
     }
 }
+// ****************** NEW ******************
+app.use(express.json());
+// ****************** NEW ******************
 app.use(session(sessionConfig));
 app.use(flash());
 

@@ -62,12 +62,18 @@
                                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                                     <h6 class="text-primary fw-bold mb-0">
                                                         lara_stewart
-                                                        <span class="text-dark ms-2">
-                                                            By: <%= comment.author.username %>
-                                                        </span>
-                                                        <span class="text-dark ms-2">
-                                                            <%= comment.body %>
-                                                        </span>
+                                                        <% if(comment.author.googleId){ %>
+                                                            <span class="text-dark ms-2">
+                                                                By: <%= comment.author.googleName %>
+                                                            </span>
+                                                            <% }else{ %>
+                                                                <span class="text-dark ms-2">
+                                                                    By: <%= comment.author.username %>
+                                                                </span>
+                                                                <% } %>
+                                                                    <span class="text-dark ms-2">
+                                                                        <%= comment.body %>
+                                                                    </span>
                                                     </h6>
                                                 </div>
                                                 <% if(currentUser && comment.author.equals(currentUser._id)){ %>

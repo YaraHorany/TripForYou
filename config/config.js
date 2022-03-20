@@ -2,7 +2,7 @@ require('dotenv').config()
 
 module.exports = {
     facebook: {
-        clientID: process.env.CLIENTID,
-        clientSecret: process.env.CLIENTSECRET
+        clientID: process.env.CLIENT_ID_FB,
+        clientSecret: process.env.CLIENT_SECRET_FB
     }
 }

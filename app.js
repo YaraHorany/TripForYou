@@ -1,15 +1,30 @@
+if (process.env.NODE_ENV !== "production") {
+    require('dotenv').config();
+}
+
 const express = require("express");
 const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
 const session = require('express-session');
+const cookieSession = require('cookie-session');
 const flash = require('connect-flash');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 
+// ******************** GOOGLE ********************
+const GoogleStrategy = require('passport-google-oauth2').Strategy;
+const findOrCreate = require("mongoose-findorcreate");
+// ******************** GOOGLE ********************
+
+
+// ******************** FACEBOOK ********************
 // const FacebookStrategy = require('passport-facebook').Strategy;
+// const findOrCreate = require("mongoose-findorcreate");
+// ******************** FACEBOOK ********************
+
 // const { facebook } = require('./config');
 
 const User = require('./models/user');
@@ -49,9 +64,7 @@ const sessionConfig = {
         maxAge: 1000 * 60 * 60 * 24 * 7
     }
 }
-// ****************** NEW ******************
 app.use(express.json());
-// ****************** NEW ******************
 app.use(session(sessionConfig));
 app.use(flash());
 
@@ -59,8 +72,17 @@ app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+passport.serializeUser((user, done) => {
+    done(null, user.id);
+});
+
+passport.deserializeUser((id, done) => {
+    User.findById(id).then(user => {
+        done(null, user);
+    });
+})
+
+// passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
     res.locals.currentUser = req.user;
@@ -69,11 +91,58 @@ app.use((req, res, next) => {
     next();
 })
 
-app.get('/fakeuser', async (req, res) => {
-    const user = new User({ email: 'yara@gmail.com', username: 'yara' });
-    const newUser = await User.register(user, 'chicken');
-    res.send(newUser);
-})
+// ******************** GOOGLE ********************
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: "http://localhost:8080/auth/google/callback",
+    passReqToCallback: true
+},
+    function (request, accessToken, refreshToken, profile, done) {
+        User.findOrCreate({ googleId: profile.id, googleName: profile.displayName }, function (err, user) {
+            return done(err, user);
+        });
+    }
+));
+
+// Auth Routes
+app.get('/auth/google', passport.authenticate('google', {
+    scope: ['profile', 'email'],
+    prompt: "select_account"
+}));
+
+app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/register' }),
+    function (req, res) {
+        // Successful authentication, redirect home.
+        res.redirect('/trips');
+    }
+);
+// ******************** GOOGLE ********************
+
+
+// ******************** FACEBOOK ********************
+// passport.use(new FacebookStrategy({
+//     clientID: process.env.CLIENT_ID_FB,
+//     clientSecret: process.env.CLIENT_SECRET_FB,
+//     callbackURL: "http://localhost:8080/auth/facebook/trips"
+// },
+//     function (accessToken, refreshToken, profile, cb) {
+//         User.findOrCreate({ facebookId: profile.id }, function (err, user) {
+//             return cb(err, user);
+//         });
+//     }
+// ));
+
+// app.get('/auth/facebook',
+//     passport.authenticate('facebook'));
+
+// app.get('/auth/facebook/trips',
+//     passport.authenticate('facebook', { failureRedirect: '/login' }),
+//     function (req, res) {
+//         // Successful authentication, redirect home.
+//         res.redirect('/trips');
+//     });
+// ******************** FACEBOOK ********************
 
 app.use('/', userRoutes);
 app.use('/trips', tripRoutes);

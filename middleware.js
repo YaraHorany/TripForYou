@@ -65,16 +65,6 @@ module.exports.validateRequestSchema = (req, res, next) => {
     }
 }
 
-// module.exports.validateRequestSchema = (req, res, next) => {
-//     const error = validationResult(req);
-//     if (error && error.errors.length != 0) {
-//         const msg = error.errors.map(el => el.msg).join(',');
-//         throw new ExpressError(msg, 400);
-//     } else {
-//         next();
-//     }
-// }
-
 
 
 

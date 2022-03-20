@@ -19,6 +19,11 @@ router.route('/login')
     .get(users.renderLogin)
     .post(passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), users.login);
 
+// Auth Google Routes
+router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'], prompt: "select_account" }));
+
+router.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/register' }), users.googleLogin);
+
 router.get('/logout', users.logout);
 
 module.exports = router;

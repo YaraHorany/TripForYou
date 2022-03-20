@@ -7,18 +7,10 @@ const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
 const session = require('express-session');
-const cookieSession = require('cookie-session');
 const flash = require('connect-flash');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
 const passport = require('passport');
-const LocalStrategy = require('passport-local');
-
-// ******************** GOOGLE ********************
-const GoogleStrategy = require('passport-google-oauth2').Strategy;
-const findOrCreate = require("mongoose-findorcreate");
-// ******************** GOOGLE ********************
-
 
 // ******************** FACEBOOK ********************
 // const FacebookStrategy = require('passport-facebook').Strategy;
@@ -26,8 +18,6 @@ const findOrCreate = require("mongoose-findorcreate");
 // ******************** FACEBOOK ********************
 
 // const { facebook } = require('./config');
-
-const User = require('./models/user');
 
 const userRoutes = require('./routes/users');
 const tripRoutes = require('./routes/trips');
@@ -45,6 +35,8 @@ db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", () => {
     console.log("Database connected");
 });
+
+require('./passport')(passport); // pass passport for configuration
 
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
@@ -70,19 +62,6 @@ app.use(flash());
 
 app.use(passport.initialize());
 app.use(passport.session());
-passport.use(new LocalStrategy(User.authenticate()));
-
-passport.serializeUser((user, done) => {
-    done(null, user.id);
-});
-
-passport.deserializeUser((id, done) => {
-    User.findById(id).then(user => {
-        done(null, user);
-    });
-})
-
-// passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
     res.locals.currentUser = req.user;
@@ -90,35 +69,6 @@ app.use((req, res, next) => {
     res.locals.error = req.flash('error');
     next();
 })
-
-// ******************** GOOGLE ********************
-passport.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:8080/auth/google/callback",
-    passReqToCallback: true
-},
-    function (request, accessToken, refreshToken, profile, done) {
-        User.findOrCreate({ googleId: profile.id, googleName: profile.displayName }, function (err, user) {
-            return done(err, user);
-        });
-    }
-));
-
-// Auth Routes
-app.get('/auth/google', passport.authenticate('google', {
-    scope: ['profile', 'email'],
-    prompt: "select_account"
-}));
-
-app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/register' }),
-    function (req, res) {
-        // Successful authentication, redirect home.
-        res.redirect('/trips');
-    }
-);
-// ******************** GOOGLE ********************
-
 
 // ******************** FACEBOOK ********************
 // passport.use(new FacebookStrategy({

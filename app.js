@@ -12,13 +12,6 @@ const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
 const passport = require('passport');
 
-// ******************** FACEBOOK ********************
-// const FacebookStrategy = require('passport-facebook').Strategy;
-// const findOrCreate = require("mongoose-findorcreate");
-// ******************** FACEBOOK ********************
-
-// const { facebook } = require('./config');
-
 const userRoutes = require('./routes/users');
 const tripRoutes = require('./routes/trips');
 const commentRoutes = require('./routes/comments');
@@ -69,30 +62,6 @@ app.use((req, res, next) => {
     res.locals.error = req.flash('error');
     next();
 })
-
-// ******************** FACEBOOK ********************
-// passport.use(new FacebookStrategy({
-//     clientID: process.env.CLIENT_ID_FB,
-//     clientSecret: process.env.CLIENT_SECRET_FB,
-//     callbackURL: "http://localhost:8080/auth/facebook/trips"
-// },
-//     function (accessToken, refreshToken, profile, cb) {
-//         User.findOrCreate({ facebookId: profile.id }, function (err, user) {
-//             return cb(err, user);
-//         });
-//     }
-// ));
-
-// app.get('/auth/facebook',
-//     passport.authenticate('facebook'));
-
-// app.get('/auth/facebook/trips',
-//     passport.authenticate('facebook', { failureRedirect: '/login' }),
-//     function (req, res) {
-//         // Successful authentication, redirect home.
-//         res.redirect('/trips');
-//     });
-// ******************** FACEBOOK ********************
 
 app.use('/', userRoutes);
 app.use('/trips', tripRoutes);

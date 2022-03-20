@@ -31,7 +31,7 @@ module.exports.login = (req, res) => {
     res.redirect(redirectUrl);
 }
 
-module.exports.googleLogin = (req, res) => {
+module.exports.googleFbLogin = (req, res) => {
     res.redirect('/trips');
 }
 

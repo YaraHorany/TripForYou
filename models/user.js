@@ -13,10 +13,9 @@ const UserSchema = new Schema({
         unique: true
     },
     googleId: String,
-    googleName: String
-    // ******************** FACEBOOK ********************
-    //facebookId: String
-    // ******************** FACEBOOK ********************    
+    googleName: String,
+    facebookId: String,
+    facebookName: String
 });
 
 UserSchema.plugin(passportLocalMongoose);

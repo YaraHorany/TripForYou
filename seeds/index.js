@@ -31,12 +31,17 @@ const seedDB = async () => {
         const randLocation = Math.floor(Math.random() * 40);
         const trip = new Trip({
             author: '623314392ffcb5416a0753c2',
-            coverUrl: 'https://media.istockphoto.com/photos/young-man-arms-outstretched-by-the-sea-at-sunrise-enjoying-freedom-picture-id1285301614',
             country: locations[randLocation].country,
             numOfDays,
             startCity: locations[randLocation].cities[Math.floor(Math.random() * 4)],
             endCity: locations[randLocation].cities[Math.floor(Math.random() * 4)],
-            lastUpdate: lastUpdate()
+            lastUpdate: lastUpdate(),
+            images: [
+                {
+                    url: 'https://res.cloudinary.com/df1uukigz/image/upload/v1647885168/trip4u/wjb4ceexgjfzmukq9pvh.jpg',
+                    filename: 'trip4u/wjb4ceexgjfzmukq9pvh'
+                }
+            ]
         })
         await trip.save();
     }

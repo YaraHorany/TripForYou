@@ -7,9 +7,11 @@
                 <div class="card mb-3">
                     <div class="row g-0 border rounded">
                         <div class="col-md-4">
-                            <a href="/trips/<%= trip._id %>">
-                                <img src="<%= trip.coverUrl %>" class="img-fluid rounded-start" alt="...">
-                            </a>
+                            <%if(trip.images.length) {%>
+                                <a href="/trips/<%= trip._id %>">
+                                    <img src="<%=trip.images[0].url%>" class="img-fluid rounded-start" alt="...">
+                                </a>
+                                <% } %>
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">

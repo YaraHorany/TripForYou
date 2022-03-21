@@ -3,10 +3,13 @@ const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const { isLoggedIn, validateTrip, isAuthor } = require('../middleware');
 const trips = require('../controllers/trips');
+const multer = require('multer');
+const { storage } = require('../cloudinary');
+const upload = multer({ storage });
 
 router.route('/')
     .get(catchAsync(trips.index))
-    .post(isLoggedIn, validateTrip, catchAsync(trips.createTrip));
+    .post(isLoggedIn, upload.array('image'), validateTrip, catchAsync(trips.createTrip));
 
 router.get('/new', isLoggedIn, trips.renderNewForm);
 

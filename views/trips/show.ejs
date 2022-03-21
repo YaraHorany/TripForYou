@@ -2,35 +2,38 @@
     <div class="row">
         <div class="col-md-6">
             <div class="card mb-3">
-                <img src="<%= trip.coverUrl %>" class="card-img-top" alt="">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <%= trip.country %>
-                    </h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Last update: <%= trip.lastUpdate %>
-                    </h6>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                        card's
-                        content.</p>
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Submitted by: <%= trip.author.username %>
-                    </li>
-                    <li class="list-group-item">Number of days: <%= trip.numOfDays %>
-                    </li>
-                    <li class="list-group-item">Start city: <%= trip.startCity %>
-                    </li>
-                    <li class="list-group-item">End city: <%= trip.endCity %>
-                    </li>
-                </ul>
-                <% if(currentUser && trip.author.equals(currentUser._id)){ %>
-                    <div class="card-body d-flex justify-content-evenly">
-                        <a class="card-link btn btn-info" href="/trips/<%= trip._id %>/edit">Edit</a>
-                        <form class="d-inline" action="/trips/<%= trip._id %>?_method=DELETE" method="POST">
-                            <button class="btn btn-danger">Delete</button>
-                        </form>
-                    </div>
+                <% for(let img of trip.images){ %>
+                    <img src="<%= img.url %>" class="card-img-top" alt="">
                     <% } %>
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <%= trip.country %>
+                            </h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Last update: <%= trip.lastUpdate %>
+                            </h6>
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk
+                                of the
+                                card's
+                                content.</p>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Posted by: <%= trip.author.username %>
+                            </li>
+                            <li class="list-group-item">Number of days: <%= trip.numOfDays %>
+                            </li>
+                            <li class="list-group-item">Start city: <%= trip.startCity %>
+                            </li>
+                            <li class="list-group-item">End city: <%= trip.endCity %>
+                            </li>
+                        </ul>
+                        <% if(currentUser && trip.author.equals(currentUser._id)){ %>
+                            <div class="card-body d-flex justify-content-evenly">
+                                <a class="card-link btn btn-info" href="/trips/<%= trip._id %>/edit">Edit</a>
+                                <form class="d-inline" action="/trips/<%= trip._id %>?_method=DELETE" method="POST">
+                                    <button class="btn btn-danger">Delete</button>
+                                </form>
+                            </div>
+                            <% } %>
             </div>
         </div>
 

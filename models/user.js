@@ -1,9 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const passportLocalMongoose = require('passport-local-mongoose');
-// ******************** FACEBOOK ********************
 const findOrCreate = require('mongoose-findorcreate');
-// ******************** FACEBOOK ********************
 
 
 const UserSchema = new Schema({
@@ -19,8 +17,6 @@ const UserSchema = new Schema({
 });
 
 UserSchema.plugin(passportLocalMongoose);
-// ******************** FACEBOOK ********************
 UserSchema.plugin(findOrCreate);
-// ******************** FACEBOOK ********************
 
 module.exports = mongoose.model('User', UserSchema);

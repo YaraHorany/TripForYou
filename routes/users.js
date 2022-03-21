@@ -22,12 +22,14 @@ router.route('/login')
 // Auth Google Routes
 router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'], prompt: "select_account" }));
 
-router.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/register' }), users.googleFbLogin);
+router.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/register' }), users.login);
 
 // Auth Facebook Routes
-router.get('/auth/facebook', passport.authenticate('facebook', { scope: ['profile', 'email'], prompt: "select_account" }));
 
-router.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/register' }), users.googleFbLogin);
+router.get('/auth/facebook', passport.authenticate('facebook', { scope: ['read_stream', 'publish_actions'] }));
+//scope: ['profile', 'email']
+
+router.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/register' }), users.login);
 
 router.get('/logout', users.logout);
 

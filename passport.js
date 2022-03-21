@@ -36,11 +36,14 @@ module.exports = function (passport) {
     passport.use(new FacebookStrategy({
         clientID: process.env.FB_CLIENT_ID,
         clientSecret: process.env.FB_CLIENT_SECRET,
-        callbackURL: "http://localhost:8080/auth/facebook/callback"
+        callbackURL: "http://localhost:8080/auth/facebook/callback",
+        profileFields: ['id', 'displayName']
     },
-        function (request, accessToken, refreshToken, profile, done) {
+        function (accessToken, refreshToken, profile, done) {
             console.log(profile);
             User.findOrCreate({ facebookId: profile.id, facebookName: profile.displayName }, function (err, user) {
+                console.log(profile.id);
+                console.log(profile.displayName);
                 return done(err, user);
             });
         }

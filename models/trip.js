@@ -3,7 +3,12 @@ const Comment = require('./comment');
 const Schema = mongoose.Schema;
 
 const tripSchema = new Schema({
-    coverUrl: String,
+    images: [
+        {
+            url: String,
+            filename: String
+        }
+    ],
     country: String,
     numOfDays: Number,
     startCity: String,

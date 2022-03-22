@@ -16,6 +16,8 @@ const userRoutes = require('./routes/users');
 const tripRoutes = require('./routes/trips');
 const commentRoutes = require('./routes/comments');
 
+const Trip = require('./models/trip');
+
 const app = express();
 
 mongoose.connect('mongodb://localhost:27017/trips', {
@@ -70,6 +72,14 @@ app.use('/trips/:id/comments', commentRoutes);
 app.get('/', (req, res) => {
     res.render('home');
 });
+
+app.post('/trips/getCountries', async (req, res) => {
+    let payload = req.body.payload.trim(); // removing spaces from both sides of the string
+    let search = await Trip.find({ country: { $regex: new RegExp('^' + payload + '.*', 'i') } }).exec(); // it has to start with payload 
+    // limit search results to 10
+    search = search.slice(0, 10);
+    res.send({ payload: search });
+})
 
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page Not Found', 404))

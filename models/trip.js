@@ -13,6 +13,12 @@ const tripSchema = new Schema({
     numOfDays: Number,
     startCity: String,
     endCity: String,
+    days: [
+        {
+            picture: String,
+            path: String
+        }
+    ],
     lastUpdate: Date,
     author: {
         type: Schema.Types.ObjectId,

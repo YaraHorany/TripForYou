@@ -8,8 +8,18 @@ const lastUpdate = () => {
 }
 
 module.exports.index = async (req, res) => {
-    const trips = await Trip.find({});
-    res.render('trips/index', { trips });
+    var noMatch = "";
+    if (req.query.search) {
+        const regex = new RegExp(escapeRegex(req.query.search), 'gi');
+        const trips = await Trip.find({ "country": regex });
+        if (trips.length == 0) {
+            noMatch = "No countries match that query, please try again.";
+        }
+        res.render('trips/index', { trips, noMatch });
+    } else {
+        const trips = await Trip.find({});
+        res.render('trips/index', { trips, noMatch });
+    }
 }
 
 module.exports.renderNewForm = (req, res) => {
@@ -66,3 +76,7 @@ module.exports.deleteTrip = async (req, res) => {
     req.flash('success', 'Successfully deleted trip!');
     res.redirect('/trips');
 }
+
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};

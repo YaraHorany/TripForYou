@@ -1,40 +1,98 @@
 <% layout('layouts/boilerplate') %>
     <div class="container mt-5 mb-5">
+        <form action="/trips" method="get" class="form-inline">
+            <div class="form-group">
+                <input type="text" name="search" placeholder="Search for a country.." class="form-control">
+                <input type="submit" value="Search" class="btn btn-default">
+            </div>
+        </form>
 
-        <% const sortedTrips=trips.sort((a, b)=> b.lastUpdate - a.lastUpdate)%>
+        <!-- <input type="text" id="search-box" placeholder="Search for a country.." onkeyup="sendData(this)">
+        <input type="submit">
+        <section id="searchResults">
 
-            <% for(let trip of sortedTrips) { %>
-                <div class="card mb-3">
-                    <div class="row g-0 border rounded">
-                        <div class="col-md-4">
-                            <%if(trip.images.length) {%>
-                                <a href="/trips/<%= trip._id %>">
-                                    <img src="<%=trip.images[0].url%>" class="img-fluid rounded-start" alt="...">
-                                </a>
-                                <% } %>
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <a href="/trips/<%= trip._id %>" class="text-decoration-none">
-                                    <h5 class="card-title mb-3">
-                                        <%= trip.country %>
-                                    </h5>
-                                </a>
-                                <h6 class="card-subtitle mb-2 text-muted">
-                                    <%= trip.numOfDays %> Days
-                                </h6>
-                                <p class="card-text">This is a wider card with supporting text below as a natural
-                                    lead-in to
-                                    additional content. This content is a little bit longer.</p>
-                                <p class="card-text">
-                                    <small class="text-muted">
-                                        <%= trip.lastUpdate %>
-                                    </small>
-                                </p>
+        </section> -->
+        <% if(noMatch !==undefined ){ %>
+            <h3>
+                <%= noMatch %>
+            </h3>
+            <% } %>
+                <% const sortedTrips=trips.sort((a, b)=> b.lastUpdate - a.lastUpdate)%>
+
+                    <% for(let trip of sortedTrips) { %>
+                        <div class="card mb-3">
+                            <div class="row g-0 border rounded">
+                                <div class="col-md-4">
+                                    <%if(trip.images.length) {%>
+                                        <a href="/trips/<%= trip._id %>">
+                                            <img src="<%=trip.images[0].url%>" class="img-fluid rounded-start"
+                                                alt="...">
+                                        </a>
+                                        <% } %>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <a href="/trips/<%= trip._id %>" class="text-decoration-none">
+                                            <h5 class="card-title mb-3">
+                                                <%= trip.country %>
+                                            </h5>
+                                        </a>
+                                        <h6 class="card-subtitle mb-2 text-muted">
+                                            <%= trip.numOfDays %> Days
+                                        </h6>
+                                        <p class="card-text">This is a wider card with supporting text below as a
+                                            natural
+                                            lead-in to
+                                            additional content. This content is a little bit longer.</p>
+                                        <p class="card-text">
+                                            <small class="text-muted">
+                                                <%= trip.lastUpdate %>
+                                            </small>
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <% } %>
+                        <% } %>
 
     </div>
+    <!-- <script>
+        function sendData(e) {
+            const searchResults = document.getElementById('searchResults');
+            let match = e.value.match(/^[a-zA-Z ,.]*/);
+            let match2 = e.value.match(/\s*/);
+            if (match2[0] === e.value) { // if a value is a sequence of spaces and nothing else
+                searchResults.innerHTML = '';
+                return;
+            }
+            if (match[0] === e.value) {
+                fetch('/trips/getCountries', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ payload: e.value })
+                })
+                    .then((res) => {
+                        console.log("RESOLVED", res);
+                        return res.json();
+                    })
+                    .then(data => {
+                        let payload = data.payload;
+                        searchResults.innerHTML = '';
+                        if (payload.length < 1) {
+                            searchResults.innerHTML = '<p>Sorry. Nothing Found.</p>'
+                            return;
+                        }
+                        payload.forEach((item, index) => {
+                            if (index > 0) searchResults.innerHTML += '<hr>';
+                            searchResults.innerHTML += `<p>${item.country}</p>`;
+                        });
+                    })
+                    .catch((e) => {
+                        console.log("ERROR", e);
+                    })
+            }
+            else {
+                searchResults.innerHTML = '<p>Sorry. Nothing Found.</p>'
+            }
+        }
+    </script> -->

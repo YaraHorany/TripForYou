@@ -9,7 +9,7 @@
                             <h5 class="card-title">
                                 <%= trip.country %>
                             </h5>
-                            <h6 class="card-subtitle mb-2 text-muted">Last update: <%= trip.lastUpdate %>
+                            <h6 class="card-subtitle mb-2 text-muted">Last updated on <%= trip.lastUpdate %>
                             </h6>
                             <p class="card-text">Some quick example text to build on the card title and make up the bulk
                                 of the
@@ -37,62 +37,66 @@
             </div>
         </div>
 
-        <div class="col-md-6">
-            <div class="card shadow-0 border" style="background-color: #f0f2f5;">
-                <div class="card-body p-4">
-                    <% if(currentUser){ %>
-                        <form action="/trips/<%= trip._id %>/comments" method="post" class="validated-form mb-3"
-                            novalidate>
-                            <div class="mb-3">
-                                <label class="form-label" for="body">+ Add a comment</label>
-                                <textarea class="form-control" name="comment[body]" id="body" cols="30" rows="3"
-                                    placeholder="Type your comment.." required></textarea>
-                                <div class="valid-feedback">
-                                    Looks good!
+        <% if(currentUser || trip.comments.length!=0) { %>
+            <div class="col-md-6">
+                <div class="card shadow-0 border" style="background-color: #f0f2f5;">
+                    <div class="card-body p-4">
+                        <% if(currentUser){ %>
+                            <form action="/trips/<%= trip._id %>/comments" method="post" class="validated-form mb-3"
+                                novalidate>
+                                <div class="mb-3">
+                                    <label class="form-label" for="body">+ Add a comment</label>
+                                    <textarea class="form-control" name="comment[body]" id="body" cols="30" rows="3"
+                                        placeholder="Type your comment.." required></textarea>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
                                 </div>
-                            </div>
-                            <button class="btn btn-primary">Submit</button>
-                        </form>
-                        <% } %>
-                            <% for(let comment of trip.comments){ %>
-                                <div class="card mb-3">
-                                    <div class="card-body">
-                                        <div class="d-flex flex-start">
-                                            <img class="rounded-circle shadow-1-strong me-3"
-                                                src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(26).webp"
-                                                alt="avatar" width="40" height="40" />
-                                            <div class="w-100">
-                                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                                    <h6 class="text-primary fw-bold mb-0">
-                                                        lara_stewart
-                                                        <% if(comment.author.googleId){ %>
-                                                            <span class="text-dark ms-2">
-                                                                By: <%= comment.author.googleName %>
-                                                            </span>
-                                                            <% }else{ %>
+                                <button class="btn btn-primary">Submit</button>
+                            </form>
+                            <% } %>
+                                <% for(let comment of trip.comments){ %>
+                                    <div class="card mb-3">
+                                        <div class="card-body">
+                                            <div class="d-flex flex-start">
+                                                <img class="rounded-circle shadow-1-strong me-3"
+                                                    src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(26).webp"
+                                                    alt="avatar" width="40" height="40" />
+                                                <div class="w-100">
+                                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                                        <h6 class="text-primary fw-bold mb-0">
+                                                            lara_stewart
+                                                            <% if(comment.author.googleId){ %>
                                                                 <span class="text-dark ms-2">
-                                                                    By: <%= comment.author.username %>
+                                                                    By: <%= comment.author.googleName %>
                                                                 </span>
-                                                                <% } %>
+                                                                <% }else{ %>
                                                                     <span class="text-dark ms-2">
-                                                                        <%= comment.body %>
+                                                                        By: <%= comment.author.username %>
                                                                     </span>
-                                                    </h6>
+                                                                    <% } %>
+                                                                        <span class="text-dark ms-2">
+                                                                            <%= comment.body %>
+                                                                        </span>
+                                                        </h6>
+                                                    </div>
+                                                    <% if(currentUser && comment.author.equals(currentUser._id)){ %>
+                                                        <form
+                                                            action="/trips/<%= trip._id %>/comments/<%= comment._id %>?_method=DELETE"
+                                                            method="POST">
+                                                            <button
+                                                                class="btn btn-link btn-sm link-grey small">Remove</button>
+                                                        </form>
+                                                        <% } %>
                                                 </div>
-                                                <% if(currentUser && comment.author.equals(currentUser._id)){ %>
-                                                    <form
-                                                        action="/trips/<%= trip._id %>/comments/<%= comment._id %>?_method=DELETE"
-                                                        method="POST">
-                                                        <button
-                                                            class="btn btn-link btn-sm link-grey small">Remove</button>
-                                                    </form>
-                                                    <% } %>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <% } %>
+                                    <% } %>
+                    </div>
                 </div>
             </div>
-        </div>
+            <% } %>
+
+
     </div>

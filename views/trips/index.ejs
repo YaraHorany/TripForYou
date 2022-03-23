@@ -1,61 +1,70 @@
 <% layout('layouts/boilerplate') %>
     <div class="container mt-5 mb-5">
-        <form action="/trips" method="get" class="form-inline">
-            <div class="form-group">
-                <input type="text" name="search" placeholder="Search for a country.." class="form-control">
-                <input type="submit" value="Search" class="btn btn-default">
+
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+                <form action="/trips" method="get" class="card card-sm">
+                    <div class="card-body row no-gutters align-items-center">
+                        <div class="col-auto">
+                            <i class="fas fa-search h4 text-body"></i>
+                        </div>
+                        <div class="col">
+                            <input class="form-control form-control-lg border-0" type="search"
+                                placeholder="Search for a country.." name="search">
+                        </div>
+                        <div class="col-auto">
+                            <input class="btn btn-common rounded-3 border-primary text-primary" type="submit"
+                                value="Search">
+                        </div>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
 
         <!-- <input type="text" id="search-box" placeholder="Search for a country.." onkeyup="sendData(this)">
         <input type="submit">
         <section id="searchResults">
 
         </section> -->
-        <% if(noMatch !==undefined ){ %>
-            <h3>
-                <%= noMatch %>
-            </h3>
-            <% } %>
-                <% const sortedTrips=trips.sort((a, b)=> b.lastUpdate - a.lastUpdate)%>
+        <% const sortedTrips=trips.sort((a, b)=> b.lastUpdate - a.lastUpdate)%>
 
-                    <% for(let trip of sortedTrips) { %>
-                        <div class="card mb-3">
-                            <div class="row g-0 border rounded">
-                                <div class="col-md-4">
-                                    <%if(trip.images.length) {%>
-                                        <a href="/trips/<%= trip._id %>">
-                                            <img src="<%=trip.images[0].url%>" class="img-fluid rounded-start"
-                                                alt="...">
-                                        </a>
-                                        <% } %>
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <a href="/trips/<%= trip._id %>" class="text-decoration-none">
-                                            <h5 class="card-title mb-3">
-                                                <%= trip.country %>
-                                            </h5>
-                                        </a>
-                                        <h6 class="card-subtitle mb-2 text-muted">
-                                            <%= trip.numOfDays %> Days
-                                        </h6>
-                                        <p class="card-text">This is a wider card with supporting text below as a
-                                            natural
-                                            lead-in to
-                                            additional content. This content is a little bit longer.</p>
-                                        <p class="card-text">
-                                            <small class="text-muted">
-                                                <%= trip.lastUpdate %>
-                                            </small>
-                                        </p>
-                                    </div>
-                                </div>
+            <% for(let trip of sortedTrips) { %>
+                <div class="card mb-3">
+                    <div class="row g-0 border rounded">
+                        <div class="col-md-4">
+                            <%if(trip.images.length) {%>
+                                <a href="/trips/<%= trip._id %>">
+                                    <img src="<%=trip.images[0].url%>" class="img-fluid rounded-start" alt="...">
+                                </a>
+                                <% } %>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <a href="/trips/<%= trip._id %>" class="text-decoration-none">
+                                    <h5 class="card-title mb-3">
+                                        <%= trip.country %>
+                                    </h5>
+                                </a>
+                                <h6 class="card-subtitle mb-2 text-muted">
+                                    <%= trip.numOfDays %> Days
+                                </h6>
+                                <p class="card-text">This is a wider card with supporting text below as a
+                                    natural
+                                    lead-in to
+                                    additional content. This content is a little bit longer.</p>
+                                <p class="card-text">
+                                    <small class="text-muted">
+                                        <%= trip.lastUpdate %>
+                                    </small>
+                                </p>
                             </div>
                         </div>
-                        <% } %>
+                    </div>
+                </div>
+                <% } %>
 
     </div>
+    <!-- live searching: -->
     <!-- <script>
         function sendData(e) {
             const searchResults = document.getElementById('searchResults');

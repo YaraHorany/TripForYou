@@ -8,17 +8,17 @@ const lastUpdate = () => {
 }
 
 module.exports.index = async (req, res) => {
-    var noMatch = "";
     if (req.query.search) {
         const regex = new RegExp(escapeRegex(req.query.search), 'gi');
         const trips = await Trip.find({ "country": regex });
         if (trips.length == 0) {
-            noMatch = "No countries match that query, please try again.";
+            req.flash('error', 'No countries match that query, please try again.');
+            return res.redirect('/trips')
         }
-        res.render('trips/index', { trips, noMatch });
+        res.render('trips/index', { trips });
     } else {
         const trips = await Trip.find({});
-        res.render('trips/index', { trips, noMatch });
+        res.render('trips/index', { trips });
     }
 }
 

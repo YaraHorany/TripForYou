@@ -2,6 +2,7 @@
     <div class="row">
         <div class="col-md-6 offset-md-3">
             <form action="/trips" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
+
                 <div class="mb-3">
                     <label for="country" class="form-label">Country</label>
                     <input type="text" class="form-control" id="country" name="trip[country]" required>
@@ -9,14 +10,12 @@
                         Looks good!
                     </div>
                 </div>
-                <input type="file" name="image" multiple>
-                <!-- <div class="mb-3">
-                    <label for="coverUrl" class="form-label">Cover URL</label>
-                    <input type="text" class="form-control" id="coverUrl" name="trip[coverUrl]" required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                </div> -->
+
+                <div class="mb-3">
+                    <label for="image" class="form-label">Choose image(s)..</label>
+                    <input class="form-control form-control-sm" id="image" name="image" type="file" multiple>
+                </div>
+
                 <div class="mb-3">
                     <label for="numOfDays" class="form-label">Number of Days</label>
                     <input type="number" class="form-control" id="numOfDays" name="trip[numOfDays]" min="1" step="1"
@@ -25,6 +24,7 @@
                         Looks good!
                     </div>
                 </div>
+
                 <div class="mb-3">
                     <label for="startCity" class="form-label">Start City</label>
                     <input type="text" class="form-control" id="startCity" name="trip[startCity]" required>
@@ -32,6 +32,7 @@
                         Looks good!
                     </div>
                 </div>
+
                 <div class="mb-3">
                     <label for="endCity" class="form-label">End City</label>
                     <input type="text" class="form-control" id="endCity" name="trip[endCity]" required>
@@ -39,9 +40,11 @@
                         Looks good!
                     </div>
                 </div>
+
                 <div class="mb-3">
                     <button class="btn btn-primary">Add Trip</button>
                 </div>
+
             </form>
         </div>
     </div>

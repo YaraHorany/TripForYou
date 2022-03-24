@@ -2,21 +2,26 @@ const mongoose = require('mongoose');
 const Comment = require('./comment');
 const Schema = mongoose.Schema;
 
+const ImageSchema = new Schema({
+    url: String,
+    filename: String
+});
+
+// virtual properties can be added only to a schema
+ImageSchema.virtual('thumbnail').get(function () {
+    return this.url.replace('/upload', '/upload/w_200');
+});
+
 const tripSchema = new Schema({
-    images: [
-        {
-            url: String,
-            filename: String
-        }
-    ],
+    images: [ImageSchema],
     country: String,
     numOfDays: Number,
     startCity: String,
     endCity: String,
-    days: [
+    daysSchedule: [
         {
             picture: String,
-            path: String
+            program: String
         }
     ],
     lastUpdate: Date,

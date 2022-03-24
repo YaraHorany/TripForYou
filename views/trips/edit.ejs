@@ -1,7 +1,9 @@
 <% layout('layouts/boilerplate') %>
     <div class="row">
         <div class="col-md-6 offset-md-3">
-            <form action="/trips/<%= trip._id %>?_method=PUT" method="POST" novalidate class="validated-form">
+            <form action="/trips/<%= trip._id %>?_method=PUT" method="POST" novalidate class="validated-form"
+                enctype="multipart/form-data">
+
                 <div class="mb-3">
                     <label for="country" class="form-label">Country</label>
                     <input type="text" class="form-control" id="country" value="<%= trip.country %>"
@@ -10,14 +12,23 @@
                         Looks good!
                     </div>
                 </div>
+
                 <div class="mb-3">
-                    <label for="coverUrl" class="form-label">Cover URL</label>
-                    <input type="text" class="form-control" id="coverUrl" value="<%= trip.image %>"
-                        name="trip[coverUrl]" required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
+                    <label for="image" class="form-label">Choose image(s)..</label>
+                    <input class="form-control form-control-sm" id="image" name="image" type="file" multiple>
                 </div>
+
+                <div class="mb-3">
+                    <% trip.images.forEach(function(img, i){ %>
+                        <img src="<%= img.thumbnail %>" class="img-thumbnail" alt="">
+                        <div class="form-check-inline">
+                            <input type="checkbox" id="image-<%= i %>" name="deleteImages[]"
+                                value="<%= img.filename %>">
+                        </div>
+                        <label for="image-<%= i %>">Delete?</label>
+                        <% }) %>
+                </div>
+
                 <div class="mb-3">
                     <label for="numOfDays" class="form-label">Number of Days</label>
                     <input type="number" class="form-control" id="numOfDays" value="<%= trip.numOfDays %>"
@@ -26,6 +37,7 @@
                         Looks good!
                     </div>
                 </div>
+
                 <div class="mb-3">
                     <label for="startCity" class="form-label">Start City</label>
                     <input type="text" class="form-control" id="startCity" value="<%= trip.startCity %>"
@@ -34,6 +46,7 @@
                         Looks good!
                     </div>
                 </div>
+
                 <div class="mb-3">
                     <label for="endCity" class="form-label">End City</label>
                     <input type="text" class="form-control" id="endCity" value="<%= trip.endCity %>"
@@ -42,9 +55,11 @@
                         Looks good!
                     </div>
                 </div>
+
                 <div class="mb-3">
                     <button class="btn btn-primary">Update Trip</button>
                 </div>
+
             </form>
             <a href="/trips/<%= trip._id %>">Back to Trip</a>
         </div>

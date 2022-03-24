@@ -1,4 +1,5 @@
 const Trip = require('../models/trip');
+const { cloudinary } = require('../cloudinary');
 
 const lastUpdate = () => {
     var today = new Date();
@@ -64,7 +65,15 @@ module.exports.renderEditForm = async (req, res) => {
 module.exports.updateTrip = async (req, res) => {
     const { id } = req.params;
     const trip = await Trip.findByIdAndUpdate(id, { ...req.body.trip });
+    const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }));
+    trip.images.push(...imgs);
     trip.lastUpdate = lastUpdate();
+    if (req.body.deleteImages) {
+        for (let filename of req.body.deleteImages) { // delete images from cloudinary
+            await cloudinary.uploader.destroy(filename);
+        }
+        await trip.updateOne({ $pull: { images: { filename: { $in: req.body.deleteImages } } } }); // delete images from db
+    }
     await trip.save();
     req.flash('success', 'Successfully updated trip!');
     res.redirect(`/trips/${trip._id}`);

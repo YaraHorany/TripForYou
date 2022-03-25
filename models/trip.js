@@ -14,14 +14,27 @@ ImageSchema.virtual('thumbnail').get(function () {
 
 const tripSchema = new Schema({
     images: [ImageSchema],
-    country: String,
-    numOfDays: Number,
-    startCity: String,
-    endCity: String,
-    daysSchedule: [
+    country: {
+        type: String,
+        trim: true
+    },
+    numOfDays: {
+        type: Number,
+        integer: true,
+        min: 1
+    },
+    startCity: {
+        type: String,
+        trim: true
+    },
+    endCity: {
+        type: String,
+        trim: true
+    },
+    daysProgram: [
         {
-            picture: String,
-            program: String
+            type: String,
+            trim: true
         }
     ],
     lastUpdate: Date,

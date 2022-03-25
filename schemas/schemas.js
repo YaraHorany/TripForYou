@@ -2,11 +2,11 @@ const Joi = require('joi');
 
 module.exports.tripSchema = Joi.object({
     trip: Joi.object({
-        country: Joi.string().required(),
-        // image: Joi.string().required(),
-        numOfDays: Joi.number().required().min(1),
-        startCity: Joi.string().required(),
-        endCity: Joi.string().required()
+        country: Joi.string().required().trim(),
+        numOfDays: Joi.number().required().integer().min(1),
+        startCity: Joi.string().required().trim(),
+        endCity: Joi.string().required().trim(),
+        daysProgram: Joi.array().items(Joi.string().allow("").trim()).min(1)
     }).required(),
     deleteImages: Joi.array()
 });

@@ -33,7 +33,6 @@ module.exports.createTrip = async (req, res, next) => {
     trip.lastUpdate = lastUpdate();
     trip.author = req.user._id;
     await trip.save();
-    console.log(trip);
     req.flash('success', 'Successfully made a new trip!');
     res.redirect('/trips');
 }

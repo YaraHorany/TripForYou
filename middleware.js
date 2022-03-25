@@ -15,9 +15,7 @@ module.exports.isLoggedIn = (req, res, next) => {
 }
 
 module.exports.validateTrip = (req, res, next) => {
-    // console.log(req.body);
-    // const obj = JSON.parse(JSON.stringify(req.body)); // req.body = [Object: null prototype] { title: 'product' }
-    // console.log(obj); // { title: 'product' }
+    console.log(req.body);
     const { error } = tripSchema.validate(req.body);
     if (error) {
         const msg = error.details.map(el => el.message).join(',');

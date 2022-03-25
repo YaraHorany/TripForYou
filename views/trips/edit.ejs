@@ -32,7 +32,8 @@
                 <div class="mb-3">
                     <label for="numOfDays" class="form-label">Number of Days</label>
                     <input type="number" class="form-control" id="numOfDays" value="<%= trip.numOfDays %>"
-                        name="trip[numOfDays]" min="1" step="1" required>
+                        name="trip[numOfDays]" min="1" step="1" onchange="next()" onfocus="this.oldvalue = this.value;"
+                        required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -54,6 +55,18 @@
                     <div class="valid-feedback">
                         Looks good!
                     </div>
+                </div>
+
+                <div id="parent">
+                    <% for(i=0; i< trip.daysProgram.length; i++){ %>
+                        <div class="mb-3">
+                            <p>Day <%= i+1 %>
+                            </p>
+                            <label for="form-label" for="description<%= i+1 %>">Description</label>
+                            <textarea class="form-control" id="description<%= i+1 %>"
+                                name="trip[daysProgram]"><%= trip.daysProgram[i] %></textarea>
+                        </div>
+                        <% } %>
                 </div>
 
                 <div class="mb-3">

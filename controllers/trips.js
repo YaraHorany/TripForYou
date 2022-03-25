@@ -31,6 +31,7 @@ module.exports.createTrip = async (req, res, next) => {
     const trip = new Trip(req.body.trip);
     trip.images = req.files.map(f => ({ url: f.path, filename: f.filename }));
     trip.lastUpdate = lastUpdate();
+    console.log(req.user._id);
     trip.author = req.user._id;
     await trip.save();
     req.flash('success', 'Successfully made a new trip!');

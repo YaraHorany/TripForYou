@@ -64,7 +64,7 @@
                             </p>
                             <label for="form-label" for="description<%= i+1 %>">Description</label>
                             <textarea class="form-control" id="description<%= i+1 %>"
-                                name="trip[daysProgram]"><%= trip.daysProgram[i] %></textarea>
+                                name="trip[daysProgram][<%= i %>]"><%= trip.daysProgram[i] %></textarea>
                         </div>
                         <% } %>
                 </div>

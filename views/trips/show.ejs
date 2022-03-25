@@ -17,18 +17,25 @@
                                 content.</p>
                         </div>
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item">Posted by: <%= trip.author.username %>
-                            </li>
-                            <li class="list-group-item">Number of days: <%= trip.numOfDays %>
-                            </li>
-                            <li class="list-group-item">Start city: <%= trip.startCity %>
-                            </li>
-                            <li class="list-group-item">End city: <%= trip.endCity %>
-                            </li>
-                            <% for(i=0; i< trip.daysProgram.length ; i++){ %>
-                                <li class="list-group-item">day <%= i+1 %>: <%= trip.daysProgram[i] %>
+
+                            <% if(trip.author.googleId){ %>
+                                <li class="list-group-item">Posted by: <%= trip.author.googleName %>
                                 </li>
-                                <% } %>
+                                <% } else{ %>
+                                    <li class="list-group-item">Posted by: <%= trip.author.username %>
+                                    </li>
+                                    <% } %>
+
+                                        <li class="list-group-item">Number of days: <%= trip.numOfDays %>
+                                        </li>
+                                        <li class="list-group-item">Start city: <%= trip.startCity %>
+                                        </li>
+                                        <li class="list-group-item">End city: <%= trip.endCity %>
+                                        </li>
+                                        <% for(i=0; i< trip.daysProgram.length ; i++){ %>
+                                            <li class="list-group-item">day <%= i+1 %>: <%= trip.daysProgram[i] %>
+                                            </li>
+                                            <% } %>
                         </ul>
                         <% if(currentUser && trip.author.equals(currentUser._id)){ %>
                             <div class="card-body d-flex justify-content-evenly">

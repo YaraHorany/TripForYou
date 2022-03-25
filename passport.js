@@ -26,7 +26,7 @@ module.exports = function (passport) {
         passReqToCallback: true
     },
         function (request, accessToken, refreshToken, profile, done) {
-            User.findOrCreate({ googleId: profile.id, googleName: profile.displayName }, function (err, user) {
+            User.findOrCreate({ googleId: profile.id, googleName: profile.displayName, googleEmail: profile.emails[0].value }, function (err, user) {
                 return done(err, user);
             });
         }

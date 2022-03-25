@@ -30,7 +30,7 @@ const seedDB = async () => {
         const numOfDays = Math.floor(Math.random() * 14) + 1; // return a random number from 1 to 14
         const randLocation = Math.floor(Math.random() * 40);
         const trip = new Trip({
-            author: '623314392ffcb5416a0753c2',
+            author: '623e2bb936f9ceccd3282c3a',
             country: locations[randLocation].country,
             numOfDays,
             startCity: locations[randLocation].cities[Math.floor(Math.random() * 4)],

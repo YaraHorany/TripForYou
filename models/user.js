@@ -5,18 +5,16 @@ const findOrCreate = require('mongoose-findorcreate');
 
 
 const UserSchema = new Schema({
-    email: {
-        type: String,
-        // required: true,
-        // unique: true
-    },
-    
+    email: String,
+    username: String,
+
     googleId: String,
     googleName: String,
     googleEmail: String,
 
     facebookId: String,
-    facebookName: String
+    facebookName: String,
+    facebookEmail: String
 });
 
 UserSchema.plugin(passportLocalMongoose);

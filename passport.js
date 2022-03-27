@@ -37,13 +37,10 @@ module.exports = function (passport) {
         clientID: process.env.FB_CLIENT_ID,
         clientSecret: process.env.FB_CLIENT_SECRET,
         callbackURL: "http://localhost:8080/auth/facebook/callback",
-        profileFields: ['id', 'displayName']
+        profileFields: ['id', 'displayName', 'emails']
     },
         function (accessToken, refreshToken, profile, done) {
-            console.log(profile);
-            User.findOrCreate({ facebookId: profile.id, facebookName: profile.displayName }, function (err, user) {
-                console.log(profile.id);
-                console.log(profile.displayName);
+            User.findOrCreate({ facebookId: profile.id, facebookName: profile.displayName, facebookEmail: profile.emails[0].value }, function (err, user) {
                 return done(err, user);
             });
         }

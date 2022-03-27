@@ -31,10 +31,6 @@ module.exports.login = (req, res) => {
     res.redirect(redirectUrl);
 }
 
-module.exports.googleFbLogin = (req, res) => {
-    res.redirect('/trips');
-}
-
 module.exports.logout = (req, res) => {
     req.logout();
     req.flash('success', 'Goodbye!');

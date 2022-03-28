@@ -63,17 +63,20 @@
                             <p>Day <%= i+1 %>
                             </p>
                             <label for="form-label" for="description<%= i+1 %>">Description</label>
-                            <textarea class="form-control" id="description<%= i+1 %>"
+                            <textarea class="form-control" id="description<%= i+1 %>" rows="10"
                                 name="trip[daysProgram][<%= i %>]"><%= trip.daysProgram[i] %></textarea>
                         </div>
                         <% } %>
                 </div>
 
                 <div class="mb-3">
-                    <button class="btn btn-primary">Update Trip</button>
+                    <button class="btn btn-primary">Update</button>
                 </div>
-
             </form>
-            <a href="/trips/<%= trip._id %>">Back to Trip</a>
+            <!-- <a href="/trips/<%= trip._id %>" class="btn btn-danger">Cancel</a> -->
         </div>
     </div>
+
+    <script>
+
+    </script>

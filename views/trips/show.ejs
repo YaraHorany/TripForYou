@@ -35,7 +35,8 @@
                                             <li class="list-group-item">End city: <%= trip.endCity %>
                                             </li>
                                             <% for(i=0; i< trip.daysProgram.length ; i++){ %>
-                                                <li class="list-group-item">day <%= i+1 %>: <%= trip.daysProgram[i] %>
+                                                <li class="list-group-item"><b>Day <%= i+1 %></b><br>
+                                                    <%= trip.daysProgram[i] %>
                                                 </li>
                                                 <% } %>
                         </ul>

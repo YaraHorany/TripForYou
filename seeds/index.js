@@ -3,7 +3,7 @@ const Trip = require('../models/trip');
 const locations = require('./locations');
 const { count } = require('../models/trip');
 const { json } = require('express/lib/response');
-
+const loremIpsum = require("lorem-ipsum").loremIpsum;
 
 mongoose.connect('mongodb://localhost:27017/trips', {
     useNewUrlParser: true,
@@ -29,10 +29,15 @@ const seedDB = async () => {
     for (let i = 0; i < 50; i++) {
         const numOfDays = Math.floor(Math.random() * 14) + 1; // return a random number from 1 to 14
         const randLocation = Math.floor(Math.random() * 40);
+        let arr = [];
+        for (let i = 0; i < numOfDays; i++) {
+            arr[i] = loremIpsum({ count: 20 });
+        }
         const trip = new Trip({
             author: '6240711aa79ff202f01b0fe2',
             country: locations[randLocation].country,
             numOfDays,
+            daysProgram: arr,
             startCity: locations[randLocation].cities[Math.floor(Math.random() * 4)],
             endCity: locations[randLocation].cities[Math.floor(Math.random() * 4)],
             lastUpdate: lastUpdate(),
